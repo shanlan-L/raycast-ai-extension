@@ -1,0 +1,55 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "assistant",
+  "title": "AI assistant",
+  "description": "大模型小助手，目前支持 Google Gemini",
+  "icon": "star.png",
+  "author": "Devin",
+  "categories": [
+    "Developer Tools"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "chat",
+      "title": "Chat",
+      "subtitle": "AI 对话",
+      "description": "通过和 AI 对话，了解你想知道的一切",
+      "icon": "star.png",
+      "mode": "view"
+    }
+  ],
+  "preferences": [
+    {
+      "description": "Gemini API Key",
+      "name": "apiKey",
+      "required": true,
+      "title": "Gemini API Key",
+      "type": "password"
+    }
+  ],
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3",
+    "@raycast/api": "^1.62.0",
+    "@raycast/utils": "^1.9.0",
+    "gemini-ai": "^1.1.0",
+    "jimp": "^0.22.10",
+    "undici": "^6.4.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "1.0.5",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.27",
+    "eslint": "^7.32.0",
+    "prettier": "^2.5.1",
+    "react": "^18.2.0",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}

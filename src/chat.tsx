@@ -1,7 +1,7 @@
 import { Icon, List, LocalStorage, Toast } from "@raycast/api";
 import React, { useEffect, useMemo, useState } from "react";
 import { answerPairToParameter, formatDate, saveChatState, toast } from "./utils";
-import useChat from "./hooks/useChat";
+import useModel from "./hooks/useModel";
 import { fetch } from "undici";
 import ListDropDown from "./components/chat/ListDropDown";
 import { ChatState, Chat } from "./components/chat/type";
@@ -22,6 +22,7 @@ const initChatData = {
 export default () => {
   const [searchText, setSearchText] = useState<string>("");
   const [chatState, setChatState] = useState<ChatState>(initChatData);
+  const { chatModel } = useModel();
 
   const getChat = useMemo(
     () =>
@@ -40,13 +41,11 @@ export default () => {
   );
 
   const sendToAI = async (query, currentChatMessages) => {
-    const { result } = useChat(
-      query,
-      currentChatMessages.map((x) => [x.prompt, x.answer]).flatMap(answerPairToParameter)
-    );
+    const history = currentChatMessages.map((x) => [x.prompt, x.answer]).flatMap(answerPairToParameter);
+    const result = await chatModel.startChat({history}).sendMessageStream(query);
 
     let text = "";
-    for await (const chunk of (await result).stream) {
+    for await (const chunk of result.stream) {
       const chunkText = chunk.text();
       text += chunkText;
 

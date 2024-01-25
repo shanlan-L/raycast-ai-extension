@@ -34,20 +34,20 @@ interface Config {
 }
 
 const defaultConfig: Config = {
-  maxOutputTokens: 800,
-  temperature: 1,
-  topP: 0.8,
-  topK: 30,
+  maxOutputTokens: 0,
+  temperature: 0,
+  topP: 40,
+  topK: 0.95,
 };
 
-export default (query, history) => {
+export default (model = "gemini-pro", config?: Config) => {
   const { apiKey } = getPreferenceValues();
   const genAI = new GoogleGenerativeAI(apiKey);
 
   const chatModel = genAI.getGenerativeModel({
-    model: "gemini-pro",
-    generationConfig: defaultConfig,
+    model,
+    generationConfig: { ...defaultConfig, ...config },
   });
 
-  return { result: chatModel.startChat({ history }).sendMessageStream(query) };
+  return { chatModel };
 };

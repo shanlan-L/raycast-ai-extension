@@ -4,7 +4,7 @@ import { answerPairToParameter, formatDate, saveChatState, toast } from "./utils
 import useModel from "./hooks/useModel";
 import { fetch } from "undici";
 import ListDropDown from "./components/chat/ListDropDown";
-import { ChatState, Chat } from "./components/chat/type";
+import { ChatState, Chat, Message } from "./components/chat/type";
 import ChatActionPanel from "./components/chat/ChatActionPanel";
 (global as any).fetch = fetch;
 
@@ -26,7 +26,7 @@ export default () => {
 
   const getChat = useMemo(
     () =>
-      (target, customChat = chatState.chats): Chat => {
+      (target: string, customChat = chatState.chats): Chat => {
         for (const chat of customChat) {
           if (chat.name === target) return chat;
         }
@@ -40,9 +40,9 @@ export default () => {
     [chatState]
   );
 
-  const sendToAI = async (query, currentChatMessages) => {
+  const sendToAI = async (query: string, currentChatMessages: Message[]) => {
     const history = currentChatMessages.map((x) => [x.prompt, x.answer]).flatMap(answerPairToParameter);
-    const result = await chatModel.startChat({history}).sendMessageStream(query);
+    const result = await chatModel.startChat({ history }).sendMessageStream(query);
 
     let text = "";
     for await (const chunk of result.stream) {

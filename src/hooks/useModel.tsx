@@ -33,12 +33,12 @@ interface Config {
   topK?: number;
 }
 
-const defaultConfig: Config = {
-  maxOutputTokens: 0,
-  temperature: 0,
-  topP: 40,
-  topK: 0.95,
-};
+// const defaultConfig: Config = {
+//   maxOutputTokens: 0,
+//   temperature: 0,
+//   topP: 40,
+//   topK: 0.95,
+// };
 
 export default (model = "gemini-pro", config?: Config) => {
   const { apiKey } = getPreferenceValues();
@@ -46,7 +46,7 @@ export default (model = "gemini-pro", config?: Config) => {
 
   const chatModel = genAI.getGenerativeModel({
     model,
-    generationConfig: { ...defaultConfig, ...config },
+    generationConfig: { ...config },
   });
 
   return { chatModel };

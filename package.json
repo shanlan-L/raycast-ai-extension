@@ -17,6 +17,13 @@
       "description": "通过和 AI 对话，了解你想知道的一切",
       "icon": "star.png",
       "mode": "view"
+    },{
+      "name": "translate",
+      "title": "translate",
+      "subtitle": "双语翻译",
+      "description": "对于您剪切板的文字进行中英文互译，并给出示例(仅支持文本格式)",
+      "icon": "📝",
+      "mode": "view"
     }
   ],
   "preferences": [

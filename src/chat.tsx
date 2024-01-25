@@ -1,11 +1,12 @@
 import { Icon, List, LocalStorage, Toast } from "@raycast/api";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { answerPairToParameter, formatDate, saveChatState, toast } from "./utils";
 import useModel from "./hooks/useModel";
 import { fetch } from "undici";
 import ListDropDown from "./components/chat/ListDropDown";
 import { ChatState, Chat, Message } from "./components/chat/type";
 import ChatActionPanel from "./components/chat/ChatActionPanel";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (global as any).fetch = fetch;
 
 const initChatData = {
@@ -37,22 +38,20 @@ export default () => {
           messages: [],
         };
       },
-    [chatState]
+    [chatState],
   );
 
   const sendToAI = async (query: string, currentChatMessages: Message[]) => {
     const history = currentChatMessages.map((x) => [x.prompt, x.answer]).flatMap(answerPairToParameter);
     const result = await chatModel.startChat({ history }).sendMessageStream(query);
 
-    let text = "";
     for await (const chunk of result.stream) {
       const chunkText = chunk.text();
-      text += chunkText;
 
       setChatState((prev) => {
         const newState = structuredClone(prev);
 
-        getChat(chatState.currentChatName, newState.chats).messages[0].answer = text;
+        getChat(chatState.currentChatName, newState.chats).messages[0].answer += chunkText;
 
         return newState;
       });
@@ -167,7 +166,7 @@ export default () => {
             />
           );
         }
-        return chat.messages.map((x, i) => {
+        return chat.messages.map((x) => {
           return (
             <List.Item
               title={x.prompt}
